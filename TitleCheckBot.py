@@ -15,9 +15,13 @@ thing_limit = 1000
 
 # Startup stuff
 print('Title Check Bot - Alpha')
+print('Waiting for Windows to start...') # I have the bot run at boot, if you don't want this extra wait time, comment out the next line.
+time.sleep(30)
 print('Reticulating splines...')
 time.sleep(3)
-reddit = praw.Reddit(user_agent="FILL THIS IN")
+
+# Reddit login and user agent
+reddit = praw.Reddit(user_agent="Title Check Bot Alpha (run by YOUR USERNAME GOES HERE)")
 print('Logging in to Reddit...')
 reddit.login(username=username, password=password)
 print('Logged in successfully.  Checking for unmoderated items...')

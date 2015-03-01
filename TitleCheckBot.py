@@ -1,6 +1,8 @@
 import praw
 import time
 import requests
+import urllib.request
+from bs4 import BeautifulSoup
 
 # Subreddit being monitored (you should use "mod" if you want to check all subreddits the bot mods)
 subreddit = "mod"
@@ -26,17 +28,23 @@ print('Logging in to Reddit...')
 reddit.login(username=username, password=password)
 print('Logged in successfully.  Checking for unmoderated items...')
 
-# Title Checker
+# Grabs Article Text
+def getArticleText(url):
+    page = urllib.request.urlopen(url).read()
+    soup = BeautifulSoup(page)
+    return str(soup)
+    
+# Reddit Stuff
 stream = praw.helpers.submission_stream(reddit, subreddit, limit=thing_limit)
 for submission in stream:
     title = submission.title
-    article = requests.get(submission.url)
+    articletext = getArticleText(submission.url)
     if submission.approved_by:
         print('Submission already approved. Ignored. Moving on...')
         continue
-    if title.lower() in article.text.lower():
+    if title.lower() in articletext.lower():
         print('Submission has correct title. Ignored. Moving on...')
-    if title.lower() not in article.text.lower():
+    if title.lower() not in articletext.lower():
         print('Submission has wrong title.  Waiting 10 seconds for AutoModerator to check...')
         time.sleep(10) # Keeps Title Check Bot from removing submissions that AutoMod would have removed anyway.
         submission.add_comment("REMOVAL COMMENT GOES HERE").distinguish()

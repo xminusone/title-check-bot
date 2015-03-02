@@ -18,15 +18,19 @@ thing_limit = 1000
 # Startup stuff
 print('Title Check Bot - Alpha')
 print('Waiting for Windows to start...') # I have the bot run at boot, if you don't want this extra wait time, comment out the next line.
-time.sleep(30)
+time.sleep(2)
+print('Adjusting bell curves...')
+time.sleep(10)
+print('Decomposing singular values...')
+time.sleep(10)
 print('Reticulating splines...')
-time.sleep(3)
+time.sleep(10)
 
 # Reddit login and user agent
 reddit = praw.Reddit(user_agent="Title Check Bot Alpha (run by YOUR USERNAME GOES HERE)")
 print('Logging in to Reddit...')
 reddit.login(username=username, password=password)
-print('Logged in successfully.  Checking for unmoderated items...')
+print('Logged in to Reddit successfully.  Checking for unmoderated items...')
 
 # Grabs Article Text
 def getArticleText(url):
@@ -35,17 +39,13 @@ def getArticleText(url):
     return str(soup)
     
 # Reddit Stuff
-stream = praw.helpers.submission_stream(reddit, subreddit, limit=thing_limit)
-for submission in stream:
+for submission in subreddit.get_unmoderated(limit=thing_limit):
     title = submission.title
     articletext = getArticleText(submission.url)
-    if submission.approved_by:
-        print('Submission already approved. Ignored. Moving on...')
-        continue
     if title.lower() in articletext.lower():
         print('Submission has correct title. Ignored. Moving on...')
-    if title.lower() not in articletext.lower():
-        print('Submission has wrong title.  Waiting 10 seconds for AutoModerator to check...')
+    else title.lower() not in articletext.lower():
+        print('Submission has wrong title.  Waiting 10 seconds for AutoModerator...')
         time.sleep(10) # Keeps Title Check Bot from removing submissions that AutoMod would have removed anyway.
         submission.add_comment("REMOVAL COMMENT GOES HERE").distinguish()
         submission.remove()

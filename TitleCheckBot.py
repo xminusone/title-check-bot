@@ -13,7 +13,7 @@ password = "bot_password"
 thing_limit = 1000
 
 # Startup stuff
-print('Title Check Bot Beta 1 - Starting Up...')
+print('Title Check Bot Beta 1 (report only version) - Starting Up...')
 print('Waiting for Windows to start...') # I have the bot run at boot, if you don't want this extra wait time, comment out the next line.
 time.sleep(10)
 print('Reticulating splines...')
@@ -57,9 +57,8 @@ def titleCheck():
             else:
                 print('Submission has wrong title.  Waiting 10 seconds for AutoModerator to check...')
                 time.sleep(10)  # Keeps Title Check Bot from removing submissions that AutoMod would have removed anyway.
-                submission.add_comment("Removed. Please see the sidebar for our rules.").distinguish()
-                submission.remove()
-                print('Removed submission by: "', submission.author.name, '". Moving on...')
+                submission.report(reason='Submission may have wrong title. Please review.')
+                print('Reported submission by: "', submission.author.name, '". Moving on...')
 while True:
     titleCheck()
     print('Checked all unmoderated items. Sleeping for 30 seconds...')

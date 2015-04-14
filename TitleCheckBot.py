@@ -8,7 +8,7 @@ from bs4 import BeautifulSoup
 # Supresses warnings in console- BeautifulSoup generates some annoying depreciation warnings we can't avoid
 warnings.filterwarnings("ignore")
  
-# Reddit account login infp
+# Reddit account login info
 username = "YOUR_BOT_USERNAME"
 password = "YOUR_BOT_PASSWORD"
  
